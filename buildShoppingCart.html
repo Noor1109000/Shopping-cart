@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Build Html item list</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+   .item {
+  border: 1px solid;
+  float: left;
+  padding: 2em 0;
+  width: 30%;
+}
+
+img {
+  margin-bottom: 20px;
+}
+
+.productitem {
+  background: none repeat scroll 0 0 green;
+  border: 1px solid gray;
+  border-radius: 20px;
+  color: white;
+  margin-left: 10px;
+  padding: 10px;
+}
+</style>
+</head>
+
+<body>
+    <div id="title">Complete Javascript Course</div>
+    <div id="output"></div>
+    <script>
+        var items = [
+            {name:'iPhone', details: 'White', cost: 500},
+            {name:'iPad', details: 'White', cost: 800},
+            {name:'cable', details: 'foot', cost: 10},
+            {name:'Laptop', details: 'intel i7', cost: 1200},
+            {name:'LCD monitor', details: '24 inch', cost: 2000},
+
+        ];
+        var html  ="";
+        var x= 0;
+        var shopCart= [];
+
+        window.onload = init;
+
+        function init(){
+            buildItems();
+            var q= document.querySelectorAll(".productitem");
+            for(var x=0; x<q.length;x++){
+                q[x].addEventListener('click', function(e){
+                    e.preventDefault();
+                    addToCart();
+                })
+            }
+        }
+
+        function addToCart(){
+            var itemInfo =event.target.dataset;
+            itemInfo.qty = 1;
+            shopCart.push(itemInfo);
+            sessionStorage.setItem('scart', JSON.stringify(shopCart));        
+
+            test();   
+           // outputCart();
+        }
+        function  test(){
+            var g =sessionStorage.getItem('scart');
+            console.log(g);
+            document.getElementById('title').innerHTML = g;
+            var q= JSON.parse(g);
+            console.log(q.name);
+       
+             }
+
+        function outputCart(){
+            if(sessionStorage.getItem('scart') != null){
+                shopCart = JSON.parse(sessionStorage.getItem('scart'));
+            
+            }else{
+               
+                var html = '<table>';
+                var total = 0;
+                shopCart.forEach(function(v){
+                    console.log(shopCart);
+                    var stotal = v.qty * v.price; 
+                    total += stotal;
+                    html += '<tr><td>'+v.name+'</td><td>'+stotal+'</td></tr>';
+                });  
+                html += '</table>';
+                document.getElementById('title').innerHTML = html;
+            }
+        }
+
+
+        function buildItems(){
+            items.forEach(function(v){
+            html += 
+            '<div class="item"><h3>'+v.name+'</h3><img src="http://placehold.it/350x150"class="img-fluid">'+v.details+'<a href="#" class="productitem" data-name ="'+v.name+'" data-s="'+v.details+'"data-price="'+v.cost+'"data-id="'+x+'">Add to Cart</a></div>';
+            x++;
+            console.log(v);
+        });
+        document.getElementById("output").innerHTML += html;
+    
+        }
+
+
+    </script>
+</body>
+</html>
